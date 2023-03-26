@@ -4,20 +4,24 @@ import { initialState, productReducer } from '../state/ProductReducer';
 
 export const PRODUCT_CONTEXT = createContext();
 
-const ProductProvider = ({children}) => {
+const ProductProvider = ({ children }) => {
     const [product, setProduct] = useState([]);
 
     const [state, dispatch] = useReducer(productReducer, initialState);
+    
 
     useEffect(() => {
-        dispatch({type: actionTypes.FETCHING_START})
+        dispatch({ type: actionTypes.FETCHING_START })
         fetch('http://localhost:5000/products')
-        .then(res => res.json())
-        .then(data => dispatch({type: actionTypes.FETCHING_SUCCESS, payload: data}))
-      }, [])
+            .then(res => res.json())
+            .then(data => dispatch({ type: actionTypes.FETCHING_SUCCESS, payload: data }))
+            .catch(() => {
+                dispatch({ type: actionTypes.FETCHING_ERROR })
+            })
+    }, [])
 
     const providedData = {
-        product
+        state
     };
 
     return (
@@ -27,7 +31,7 @@ const ProductProvider = ({children}) => {
     );
 };
 
-export const useProducts = () =>{
+export const useProducts = () => {
     const context = useContext(PRODUCT_CONTEXT);
     return context;
 }
