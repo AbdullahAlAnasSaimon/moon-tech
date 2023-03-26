@@ -5,7 +5,6 @@ import { initialState, productReducer } from '../state/ProductReducer';
 export const PRODUCT_CONTEXT = createContext();
 
 const ProductProvider = ({ children }) => {
-    const [product, setProduct] = useState([]);
 
     const [state, dispatch] = useReducer(productReducer, initialState);
     
@@ -21,7 +20,8 @@ const ProductProvider = ({ children }) => {
     }, [])
 
     const providedData = {
-        state
+        state,
+        dispatch
     };
 
     return (
