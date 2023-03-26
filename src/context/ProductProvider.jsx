@@ -1,14 +1,14 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 export const PRODUCT_CONTEXT = createContext();
 
 const ProductProvider = ({children}) => {
-    const [product, setProduxt] = useState([]);
+    const [product, setProduct] = useState([]);
 
     useEffect(() => {
         fetch('http://localhost:5000/products')
         .then(res => res.json())
-        .then(data => product(data))
+        .then(data => setProduct(data))
       }, [])
 
     const providedData = {
@@ -21,5 +21,10 @@ const ProductProvider = ({children}) => {
         </PRODUCT_CONTEXT.Provider>
     );
 };
+
+export const useProducts = () =>{
+    const context = useContext(PRODUCT_CONTEXT);
+    return context;
+}
 
 export default ProductProvider;
